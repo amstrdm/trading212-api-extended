@@ -102,7 +102,21 @@ class Trading212:
 
         if icon not in valid_icons:
             raise ValueError(f"icon must be one of {valid_icons}")
-        
+    
+    @staticmethod
+    def _validate_instrument_shares(instrument_shares):
+        if not isinstance(instrument_shares, dict):
+            raise TypeError("instrument_shares must be a dictionary")
+        if not instrument_shares:
+            raise ValueError("instrument_shares cannot be empty")
+        for key, value in instrument_shares.items():
+            if not isinstance(key, str):
+                raise TypeError("Instrument identifiers must be strings")
+            if not isinstance(value, (int, float)):
+                raise TypeError("Number of shares must be a number")
+            if value <= 0:
+                raise ValueError("Number of shares must be greater than zero")
+
     def orders(self, cursor: int = 0, ticker: str = None, limit: int = 50):
         """Historical order data"""
 
@@ -283,14 +297,15 @@ class Trading212:
         end_date: datetime,
         goal: int,
         icon: str,
-        instrument_shares: object,
+        instrument_shares: dict,
         name: str
     ):
         """Create a Pie"""
         self._validate_dividend_cash_action(dividend_cash_action)
         self._validate_icon(icon)
         self._validate_date(end_date)
-
+        self._validate_instrument_shares(instrument_shares)
+        
         return self._post(
             f"/equity/pies",
             data={
@@ -318,14 +333,15 @@ class Trading212:
         end_date: str,
         goal: int,
         icon: str,
-        instrument_shares: object,
+        instrument_shares: dict,
         name: str
     ):
         """Update existing Pie"""
         self._validate_dividend_cash_action(dividend_cash_action)
         self._validate_icon(icon)
         self._validate_date(end_date)
-        
+        self._validate_instrument_shares(instrument_shares)
+
         return self._post(
             f"equity/pies/{id}",
             data={
