@@ -15,7 +15,7 @@ pip install trading212-api-extended
 ## Usage
 
 ```python
-from trading212_rest import Trading212
+from trading212_api_extended import Trading212
 
 client = Trading212(api_key="your_api_token", demo=False)
 
