@@ -1,20 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "trading212-rest"
+name = "trading212-api-extended"
+version = "1.0.0"
+description = "An Extended (unofficial) Rest API client for Trading212"
 authors = [
-    {name = "Marcin Szymanski", email = "ms32035@gmail.com"},
+    {name = "Antonio Caserta", email = "a.caserta@proton.me"},
 ]
-description = "Rest API client for Trading212"
-
+readme = "Readme.md"
+license = { text = "MIT" }
 requires-python = ">=3.10"
-
 dependencies = [
     "requests"
 ]
-
+keywords = ["trading212", "api", "client", "trading", "finance"]
 version = "0.5.0"
 
 [project.urls]
-homepage = "https://github.com/ms32035/trading212-rest"
+homepage = "https://github.com/amstrdm/trading212-api-extended"
 
 [tool.setuptools.packages.find]
 ["trading212_rest*"]
