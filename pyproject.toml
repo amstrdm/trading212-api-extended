@@ -16,7 +16,6 @@ dependencies = [
     "requests"
 ]
 keywords = ["trading212", "api", "client", "trading", "finance"]
-version = "0.5.0"
 
 [project.urls]
 homepage = "https://github.com/amstrdm/trading212-api-extended"
