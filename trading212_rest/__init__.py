@@ -1,5 +1,5 @@
 import logging
-
+from datetime import datetime
 import requests
 from requests.exceptions import HTTPError
 
@@ -78,6 +78,31 @@ class Trading212:
         if time_validity not in ["GTC", "DAY"]:
             raise ValueError("time_validity must be one of GTC or DAY")
 
+    @staticmethod
+    def _validate_date(date_text: str):
+        try:
+            # Attempt to parse the date string
+            datetime.strptime(date_text, "%Y-%m-%dT%H:%M:%SZ")
+        except ValueError:
+            raise ValueError("Incorrect date format, should be YYYY-MM-DDTHH:MM:SSZ")
+    
+    @staticmethod
+    def _validate_dividend_cash_action(dividend_cash_action:str):
+        valid_actions = ["REINVEST", "TO_ACCOUNT_CASH"]
+        if dividend_cash_action not in valid_actions:
+            raise ValueError(f"dividendCashAction must be one of {valid_actions}")
+
+    @staticmethod
+    def _validate_icon(icon:str):
+        valid_icons = [
+            "Home", "PiggyBank", "Iceberg", "Airplane", "RV", "Unicorn", "Whale", "Convertable", "Family",
+            "Coins", "Education", "BillsAndCoins", "Bills", "Water","Wind", "Car", "Briefcase", "Medical",
+            "Landscape", "Child", "Vault", "Travel", "Cabin", "Apartments", "Burger", "Bus", "Energy", 
+            "Factory", "Global", "Leaf", "Materials", "Pill", "Ring", "Shipping", "Storefront", "Tech", "Umbrella"]
+
+        if icon not in valid_icons:
+            raise ValueError(f"icon must be one of {valid_icons}")
+        
     def orders(self, cursor: int = 0, ticker: str = None, limit: int = 50):
         """Historical order data"""
 
@@ -215,7 +240,74 @@ class Trading212:
             },
         )
 
+    def pies(self):
+        """Fetch all Pies"""
+        return self._get("equity/pies")
     
+    def pie_create(
+        self,
+        dividend_cash_action: str,
+        end_date: str,
+        goal: int,
+        icon: str,
+        instrument_shares: object,
+        name: str
+    ):
+        """Create a Pie"""
+        self._validate_dividend_cash_action(dividend_cash_action)
+        self._validate_icon(icon)
+        self._validate_date(end_date)
+
+        return self._post(
+            f"/equity/pies",
+            data={
+                "dividendCashAction": dividend_cash_action,
+                "endDate": end_date,
+                "goal": goal,
+                "icon": icon,
+                "instrumentShares": instrument_shares,
+                "name": name
+            },
+        )
+    
+    def pie_delete(self, id: int):
+        """Delete Pie by ID"""
+        return self._delete_url(f"/equity/pies/{id}")
+    
+    def pie(self, id:int):
+        """Fetch Pie by ID"""
+        return self._get(f"/equity/pies/{id}")
+    
+    def pie_update(
+        self,
+        id:int,
+        dividend_cash_action: str,
+        end_date: str,
+        goal: int,
+        icon: str,
+        instrument_shares: object,
+        name: str
+    ):
+        """Update existing Pie"""
+        self._validate_dividend_cash_action(dividend_cash_action)
+        self._validate_icon(icon)
+        self._validate_date(end_date)
+        
+        return self._post(
+            f"equity/pies/{id}",
+            data={
+                "dividendCashAction": dividend_cash_action,
+                "endDate": end_date,
+                "goal":goal,
+                "icon": icon,
+                "instrumentShares": instrument_shares,
+                "name": name
+            },
+        )
+        
+
+        
+
 
 
 
