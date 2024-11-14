@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trading212-api-extended"
-version = "1.0.0"
+version = "1.0.1"
 description = "An Extended (unofficial) Rest API client for Trading212"
 authors = [
     {name = "Antonio Caserta", email = "a.caserta@proton.me"},
