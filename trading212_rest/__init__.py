@@ -121,6 +121,39 @@ class Trading212:
 
         return self._process_items(self._get("history/dividends", params=params))
 
+    def export(self):
+        """Fetches all Account exports as a List"""
+        return self._get("history/exports")
+    
+    def export_csv(
+        self,
+        time_from: datetime,
+        time_to: datetime,
+        include_dividends: bool = True,
+        include_interest: bool = True,
+        include_orders: bool = True,
+        include_transactions = True,
+    ):
+        """Request a csv export of the account's orders, dividends and transactions history"""
+        # Format the date-time parameters to ISO 8601 strings
+        time_from_str = time_from.strftime("%Y-%m-%dT%H:%M:%SZ")
+        time_to_str = time_to.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        return self._post(
+            "/history/exports",
+            data={
+                "dataIncluded": {
+                "includeDividends": include_dividends,
+                "includeInterest": include_interest,
+                "includeOrders": include_orders,
+                "includeTransactions": include_transactions
+                },  
+                "timeFrom": time_from_str,
+                "timeTo": time_to_str
+            },
+        )
+
+
     def transactions(self, cursor: int = 0, limit: int = 50):
         """Transactions list"""
 
@@ -247,7 +280,7 @@ class Trading212:
     def pie_create(
         self,
         dividend_cash_action: str,
-        end_date: str,
+        end_date: datetime,
         goal: int,
         icon: str,
         instrument_shares: object,
@@ -307,7 +340,6 @@ class Trading212:
         
 
         
-
 
 
 
