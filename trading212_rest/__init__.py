@@ -136,11 +136,15 @@ class Trading212:
         return self._get(f"equity/orders/{id}")
 
     def equity_order_cancel(self, id: int):
-        """Camcel equity order"""
+        """Cancel equity order"""
         return self._delete_url(f"equity/orders/{id}")
 
     def equity_order_place_limit(
-        self, ticker: str, quantity: int, limit_price: float, time_validity: str
+        self, 
+        ticker: str, 
+        quantity: int, 
+        limit_price: float, 
+        time_validity: str
     ):
         """Place limit order"""
 
@@ -156,7 +160,11 @@ class Trading212:
             },
         )
 
-    def equity_order_place_market(self, ticker: str, quantity: int):
+    def equity_order_place_market(
+        self,
+        ticker: str, 
+        quantity: int
+    ):
         """Place market order"""
 
         return self._post(
@@ -164,7 +172,11 @@ class Trading212:
         )
 
     def equity_order_place_stop(
-        self, ticker: str, quantity: int, stop_price: float, time_validity: str
+        self, 
+        ticker: str,
+        quantity: int, 
+        stop_price: float, 
+        time_validity: str
     ):
         """Place stop order"""
 
@@ -202,6 +214,10 @@ class Trading212:
                 "timeValidity": time_validity,
             },
         )
+
+    
+
+
 
     def __repr__(self):
         return "Trading212(api_key=****{}, demo={})".format(
